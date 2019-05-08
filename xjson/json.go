@@ -9,3 +9,8 @@ func MustToJsonString(v interface{}) string {
 	}
 	return string(bytes)
 }
+
+func SafeMarshal(v interface{}) []byte {
+	buf, _ := json.Marshal(v)
+	return buf
+}

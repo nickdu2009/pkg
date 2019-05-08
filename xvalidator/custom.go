@@ -1,0 +1,4 @@
+package xvalidator
+
+func RegisterCustomValidator() {
+}
