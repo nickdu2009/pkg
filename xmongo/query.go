@@ -18,12 +18,11 @@ func SetUpdateTime(update bson.M) bson.M {
 }
 
 type QueryOptions struct {
-	Skip int
-	Limit int
-	Sort []string
+	Skip     int
+	Limit    int
+	Sort     []string
 	Selector bson.M
 }
-
 
 func ApplyQueryOpts(query *mgo.Query, opts ...QueryOpt) *mgo.Query {
 	qo := &QueryOptions{}
@@ -64,5 +63,11 @@ func Limit(limit int) QueryOpt {
 func Sort(fields ...string) QueryOpt {
 	return func(opts *QueryOptions) {
 		opts.Sort = append(opts.Sort, fields...)
+	}
+}
+
+func Select(selector bson.M) QueryOpt {
+	return func(opts *QueryOptions) {
+		opts.Selector = selector
 	}
 }
