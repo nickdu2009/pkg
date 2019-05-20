@@ -21,6 +21,7 @@ type QueryOptions struct {
 	Skip int
 	Limit int
 	Sort []string
+	Selector bson.M
 }
 
 
@@ -38,6 +39,11 @@ func ApplyQueryOpts(query *mgo.Query, opts ...QueryOpt) *mgo.Query {
 	if qo.Limit != 0 {
 		query = query.Limit(qo.Limit)
 	}
+
+	if qo.Selector != nil {
+		query = query.Select(qo.Selector)
+	}
+
 	return query
 }
 
