@@ -2,7 +2,7 @@ package xgin
 
 import (
 	"fmt"
-	httpLogger "github.com/elafarge/gin-http-logger"
+	httpLogger "github.com/nickxb/gin-http-logger"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"os"
