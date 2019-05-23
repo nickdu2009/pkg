@@ -13,7 +13,7 @@ func RegisterCustomValidator() {
 
 func ValidateObjectId(fl validator.FieldLevel) bool {
 	if idStr, ok := fl.Field().Interface().(string); ok {
-		if bson.IsObjectIdHex(idStr) {
+		if idStr == "" || bson.IsObjectIdHex(idStr) {
 			return true
 		}
 	}
