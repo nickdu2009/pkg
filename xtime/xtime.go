@@ -1,13 +1,34 @@
 package xtime
 
 import (
+	"fmt"
+	"github.com/pkg/errors"
 	"strconv"
 	"time"
 )
 
-func IntDateOfDay(t time.Time) int {
-	date, _ := strconv.Atoi(t.Format("20060102"))
-	return date
+func IntDateOfDay(t time.Time) (int, error) {
+	return IntDateOfDayWithFormat(t, "20060102")
+}
+
+func DayOfIntDate(i int) (time.Time, error) {
+	return DayOfIntDateWithFormat(i, "20060102")
+}
+
+func IntDateOfDayWithFormat(t time.Time, layout string) (int, error) {
+	date, err := strconv.Atoi(t.Format(layout))
+	if err != nil {
+		return 0, errors.WithStack(err)
+	}
+	return date, nil
+}
+
+func DayOfIntDateWithFormat(i int, layout string) (time.Time, error) {
+	day, err := time.Parse(layout, fmt.Sprint(i))
+	if err != nil {
+		return time.Time{}, errors.WithStack(err)
+	}
+	return day, err
 }
 
 func BeginningOfDay(t time.Time) time.Time {
