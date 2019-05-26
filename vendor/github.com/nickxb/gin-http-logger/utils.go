@@ -46,7 +46,7 @@ func buildPayload(logEntry *Log) (logPayload AccessLog) {
 		Time:          int64(logEntry.latency.Nanoseconds() / 1000),
 		Request: RequestLogEntry{
 			Method:      logEntry.context.Request.Method,
-			Path:        logEntry.context.Request.URL.Path,
+			URI:         logEntry.context.Request.URL.RequestURI(),
 			HTTPVersion: logEntry.context.Request.Proto,
 			Headers:     requestHeaders,
 			HeaderSize:  requestHeaderSize,

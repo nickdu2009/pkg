@@ -28,7 +28,7 @@ type HTTPContent struct {
 // RequestLogEntry describes the incoming requests log format
 type RequestLogEntry struct {
 	Method      string            `json:"method"`
-	Path        string            `json:"path"`
+	URI         string            `json:"uri"`
 	HTTPVersion string            `json:"http_version"`
 	Headers     map[string]string `json:"headers"`
 	HeaderSize  int               `json:"headers_size"`
