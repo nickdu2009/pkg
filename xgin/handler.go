@@ -2,6 +2,7 @@ package xgin
 
 import (
 	"io"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nickxb/pkg/xgin/xrender"
@@ -44,14 +45,14 @@ func DataFromReader(code int, contentLength int64, contentType string, reader io
 	return r
 }
 
-//func Redirect(code int, location string, req *http.Request) xrender.Render {
-//	r := xrender.Redirect{}
-//	r.Code_ = -1
-//	r.Redirect.Code = code
-//	r.Location = location
-//	r.Request = req
-//	return r
-//}
+func Redirect(code int, location string, req *http.Request) xrender.Render {
+	r := xrender.Redirect{}
+	r.Code_ = -1
+	r.Redirect.Code = code
+	r.Location = location
+	r.Request = req
+	return r
+}
 
 func Data(code int, contentType string, data []byte) xrender.Render {
 	r := xrender.Data{}
