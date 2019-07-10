@@ -2,17 +2,19 @@ package xtime
 
 import (
 	"fmt"
-	"github.com/pkg/errors"
 	"strconv"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 func IntDateOfDay(t time.Time) (int, error) {
 	return IntDateOfDayWithFormat(t, "20060102")
 }
 
-func DayOfIntDate(i int) (time.Time, error) {
-	return DayOfIntDateWithFormat(i, "20060102")
+//本地时区
+func DayOfIntDateInLocal(i int) (time.Time, error) {
+	return DayOfIntDateInLocationWithFormat(i, "20060102", time.Local)
 }
 
 func IntDateOfDayWithFormat(t time.Time, layout string) (int, error) {
@@ -25,6 +27,14 @@ func IntDateOfDayWithFormat(t time.Time, layout string) (int, error) {
 
 func DayOfIntDateWithFormat(i int, layout string) (time.Time, error) {
 	day, err := time.Parse(layout, fmt.Sprint(i))
+	if err != nil {
+		return time.Time{}, errors.WithStack(err)
+	}
+	return day, err
+}
+
+func DayOfIntDateInLocationWithFormat(i int, layout string, loc *time.Location) (time.Time, error) {
+	day, err := time.ParseInLocation(layout, fmt.Sprint(layout), loc)
 	if err != nil {
 		return time.Time{}, errors.WithStack(err)
 	}
