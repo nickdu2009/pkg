@@ -12,6 +12,10 @@ func IntDateOfDay(t time.Time) (int, error) {
 	return IntDateOfDayWithFormat(t, "20060102")
 }
 
+func DayOfIntDate(i int) (time.Time, error) {
+	return DayOfIntDateWithFormat(i, "20060102")
+}
+
 //本地时区
 func DayOfIntDateInLocal(i int) (time.Time, error) {
 	return DayOfIntDateInLocationWithFormat(i, "20060102", time.Local)
