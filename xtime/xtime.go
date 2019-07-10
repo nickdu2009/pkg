@@ -38,7 +38,7 @@ func DayOfIntDateWithFormat(i int, layout string) (time.Time, error) {
 }
 
 func DayOfIntDateInLocationWithFormat(i int, layout string, loc *time.Location) (time.Time, error) {
-	day, err := time.ParseInLocation(layout, fmt.Sprint(layout), loc)
+	day, err := time.ParseInLocation(layout, fmt.Sprint(i), loc)
 	if err != nil {
 		return time.Time{}, errors.WithStack(err)
 	}
