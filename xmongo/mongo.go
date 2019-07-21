@@ -1,12 +1,13 @@
 package xmongo
 
 import (
-	"errors"
-	"fmt"
-	"github.com/globalsign/mgo"
-	"github.com/nickxb/pkg/xsync"
 	"sync"
 	"time"
+
+	"github.com/pkg/errors"
+
+	"github.com/globalsign/mgo"
+	"github.com/nickxb/pkg/xsync"
 )
 
 var (
@@ -15,9 +16,12 @@ var (
 )
 
 type MongoConfig struct {
-	Alias   string `json:"alias"`
-	Url     string `json:"url"`
-	Timeout int    `json:"timeout"`
+	Alias     string `json:"alias"`
+	Url       string `json:"url"`
+	Timeout   int    `json:"timeout"`
+	PoolLimit int    `json:"pool_limit"`
+	//单位是秒
+	PoolTimeout int `json:"pool_timeout"`
 }
 
 func InitMongoConfigs(configs []*MongoConfig) error {
@@ -28,8 +32,10 @@ func InitMongoConfigs(configs []*MongoConfig) error {
 
 		s, err := CreateMongoSession(c.Alias, c.Url, time.Duration(c.Timeout)*time.Second)
 		if err != nil {
-			return errors.New(fmt.Sprintf("mongo alias %s url %s error %v", c.Alias, c.Url, err))
+			return errors.Errorf("mongo alias %s url %s error %v", c.Alias, c.Url, err)
 		}
+		s.SetPoolLimit(c.PoolLimit)
+		s.SetPoolTimeout(time.Duration(c.PoolTimeout) * time.Second)
 		xsync.WithLock(mongoSessionsLock, func() {
 			mongoSessions[c.Alias] = s
 		})
@@ -91,7 +97,7 @@ func DBCollNames(alias string, dbName string) (collNames []string, err error) {
 	return collNames, nil
 }
 
-func DBDatabaseNames(alias string) ([]string, error)  {
+func DBDatabaseNames(alias string) ([]string, error) {
 	sess := GetMongoSession(alias)
 	defer sess.Close()
 	return sess.DatabaseNames()
