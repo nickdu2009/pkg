@@ -2,13 +2,14 @@ package xgin
 
 import (
 	"fmt"
-	httpLogger "github.com/nickxb/gin-http-logger"
-	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"os"
+
+	"github.com/gin-gonic/gin"
+	httpLogger "github.com/nickxb/gin-http-logger"
+	"github.com/sirupsen/logrus"
 )
 
-func AccessLogger(file string, level string) gin.HandlerFunc {
+func AccessLogger(file string, level string, excludePaths ...string) gin.HandlerFunc {
 	accessLogger := logrus.New()
 	accessLogger.SetFormatter(&logrus.TextFormatter{
 		TimestampFormat: "2006-01-02 15:04:05.000",
@@ -31,6 +32,11 @@ func AccessLogger(file string, level string) gin.HandlerFunc {
 		BodyLogPolicy:  httpLogger.LogAllBodies,
 		MaxBodyLogSize: 1024 * 16, //16k
 		DropSize:       1024 * 10, //10k
+	}
+
+	alc.ExcludePaths = map[string]bool{}
+	for _, excludePath := range excludePaths {
+		alc.ExcludePaths[excludePath] = true
 	}
 
 	return httpLogger.New(alc)
