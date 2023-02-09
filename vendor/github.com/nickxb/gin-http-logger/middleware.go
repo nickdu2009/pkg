@@ -35,10 +35,16 @@ type AccessLoggerConfig struct {
 	MaxBodyLogSize int64
 	BodyLogPolicy  int
 	RetryInterval  time.Duration
+	ExcludePaths   map[string]bool
 }
 
 func buildLoggingMiddleware(conf AccessLoggerConfig, logQueue LogForwardingQueue) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		if conf.ExcludePaths != nil && conf.ExcludePaths[c.Request.URL.Path] {
+			c.Next()
+			return
+		}
+
 		var requestBody, responseBody string
 		var responseBodyLeech *LeechedGinResponseWriter
 		var requestBodyLeech *LeechedReadCloser
